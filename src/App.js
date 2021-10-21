@@ -1,18 +1,15 @@
-import Door from './components/Door/Door';
 import Header from './components/Header/Header';
 import Instructions from './components/Instructions/Instructions';
-
-const NUM_DOORS = 3;
+import Doors from './components/Doors/Doors';
 
 function App() {
-
   
   return (
     <div className="App">
       <Header />
       <div className='game'>
         <Instructions />
-        <Door />
+        <Doors />
       </div>
     </div>
   );
