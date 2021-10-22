@@ -1,32 +1,35 @@
 import { useState, useEffect } from 'react';
 import Door from "../Door/Door";
 import uniqid from 'uniqid';
-import { doorModel } from '../../utils/door-model';
+import { initializeDoorsModel } from '../../utils/door-model';
 import './Doors.scss';
 
 const NUM_DOORS = 3;
-function Doors() {
-    const [isGameActive, setIsGameActive] = useState(true);
-    const [counter, setCounter] = useState(0);
-    const [winCount, setwinCount] = useState(0);
-    const [winStreak, setWinStreak] = useState(0);
 
-    const [doorsModel, setDoorsModel]= useState(
-        Array(NUM_DOORS).fill(null).map((_, index) => doorModel(index))
-    )
+function Doors({isGameActive, gameEnd}) {
+    const [counter, setCounter] = useState(0);
+    const [doorsModel, setDoorsModel]= useState(null);
 
     useEffect(() => {
-        const killerIndex = Math.floor(Math.random()*NUM_DOORS);
-        setDoorsModel(currDoorsModel => currDoorsModel.map((currDoor, index) => {
-                return index === killerIndex
-                ? {...currDoor, isKiller: true}
-                : currDoor
-            })
-        )
-    }, [])
+        if(isGameActive){
+            setDoorsModel(initializeDoorsModel(NUM_DOORS));
+            const killerIndex = Math.floor(Math.random()*NUM_DOORS);
+            console.log('killer index: ', killerIndex+1);
+            setDoorsModel(currDoorsModel => currDoorsModel.map((currDoor, index) => {
+                    return index === killerIndex
+                    ? {...currDoor, isKiller: true}
+                    : currDoor
+                })
+            )
+            return;
+        }
+        setCounter(0);
+    }, [isGameActive]);
+
 
     const handleOpenDoor = (selectedDoor) => {
-        if (selectedDoor.disabled) return;
+        if (selectedDoor.disabled || selectedDoor.opened || !isGameActive) return;
+
         setDoorsModel(currDoorsModel => {
             return currDoorsModel.map(currDoorModel => {
                 return selectedDoor.index === currDoorModel.index 
@@ -45,8 +48,14 @@ function Doors() {
                 : {...currDoorModel, disabled: false}
             })
         })
-        if (selectedDoor.isKiller) console.log('dead');
-        if (counter === NUM_DOORS - 1) console.log('win');
+        if (selectedDoor.isKiller) {
+            gameEnd('lose');
+            return;
+        }
+        if (counter === NUM_DOORS - 1) {
+            gameEnd('win');
+            return;
+        }
     }
 
     const displayDoors = () => {
@@ -61,9 +70,11 @@ function Doors() {
     }
 
     return(
-        <div className='Doors'>
-            {displayDoors(NUM_DOORS)}
-        </div>
+        <>
+            <div className='Doors'>
+                {doorsModel && displayDoors(NUM_DOORS)}
+            </div>
+        </>
     )
 }
 

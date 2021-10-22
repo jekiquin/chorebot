@@ -1,4 +1,4 @@
-export function doorModel(index) {
+function doorModel(index) {
     return {
         index,
         isOpening: false,
@@ -6,4 +6,8 @@ export function doorModel(index) {
         isKiller: false,
         disabled: false
     }
+}
+
+export function initializeDoorsModel(numDoors) {
+    return Array(numDoors).fill(null).map((_, index) => doorModel(index))
 }
