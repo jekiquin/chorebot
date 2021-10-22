@@ -4,6 +4,7 @@ import './Door.scss';
 import doorImage from '../../assets/images/Door.png';
 import killerImage from '../../assets/images/killer.png';
 import safeImage from '../../assets/images/safebunny.png';
+import doorBg from '../../assets/images/Doorbg.png';
 
 function Door({doorModel, handleOpenDoor, doorOpened}) {
     const {isOpening, isOpened, isKiller} = doorModel;
@@ -33,6 +34,11 @@ function Door({doorModel, handleOpenDoor, doorOpened}) {
                 src={isKiller ? killerImage : safeImage} 
                 alt='' 
                 className='Door__bunny' 
+            />
+            <img 
+                src={doorBg} 
+                alt='door background' 
+                className='Door__background'
             />
         </div>
         
