@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Door from "../Door/Door";
 import uniqid from 'uniqid';
 import { doorModel } from '../../utils/door-model';
@@ -6,10 +6,24 @@ import './Doors.scss';
 
 const NUM_DOORS = 3;
 function Doors() {
+    const [isGameActive, setIsGameActive] = useState(true);
+    const [counter, setCounter] = useState(0);
+    const [winCount, setwinCount] = useState(0);
+    const [winStreak, setWinStreak] = useState(0);
 
     const [doorsModel, setDoorsModel]= useState(
         Array(NUM_DOORS).fill(null).map((_, index) => doorModel(index))
     )
+
+    useEffect(() => {
+        const killerIndex = Math.floor(Math.random()*NUM_DOORS);
+        setDoorsModel(currDoorsModel => currDoorsModel.map((currDoor, index) => {
+                return index === killerIndex
+                ? {...currDoor, isKiller: true}
+                : currDoor
+            })
+        )
+    }, [])
 
     const handleOpenDoor = (selectedDoor) => {
         if (selectedDoor.disabled) return;
@@ -20,6 +34,7 @@ function Doors() {
                 : {...currDoorModel, disabled: true}
             })
         })
+        setCounter(currCounter => currCounter + 1);
     }
 
     const doorOpened = (selectedDoor) => {
@@ -30,6 +45,8 @@ function Doors() {
                 : {...currDoorModel, disabled: false}
             })
         })
+        if (selectedDoor.isKiller) console.log('dead');
+        if (counter === NUM_DOORS - 1) console.log('win');
     }
 
     const displayDoors = () => {
@@ -42,8 +59,6 @@ function Doors() {
                 />
         })
     }
-
-    console.log(doorsModel)
 
     return(
         <div className='Doors'>
