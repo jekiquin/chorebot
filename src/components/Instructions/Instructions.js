@@ -23,7 +23,9 @@ function Instructions() {
         <section>
             <h2>Instructions</h2>
             <table>
-                {displayInstructions()}
+                <tbody>
+                    {displayInstructions()}
+                </tbody>
             </table>
         </section>
     )

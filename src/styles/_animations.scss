@@ -1,9 +1,11 @@
+@use 'variables' as *;
+
 @keyframes door-open {
     from {
         transform: rotateY(0);
     }
 
     to {
-        transform: rotateY(80deg)
+        transform: rotateY($door-open-angle)
     }
 }

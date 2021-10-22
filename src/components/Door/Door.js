@@ -1,20 +1,32 @@
-import { useEffect } from 'react';
+
 import PropTypes from 'prop-types';
 import './Door.scss';
 import doorImage from '../../assets/images/Door.png';
 
-function Door({isOpened}) {
+function Door({doorModel, handleOpenDoor, doorOpened}) {
+    const {isOpening, isOpened, isKiller} = doorModel;
 
-    useEffect(() => {
-        const img = new Image();
-        img.src = doorImage;
-    }, [])
+    const doorClassName = () => {
+        let outputClass = 'Door__img';
+        if (isOpening) {
+            outputClass += ` ${outputClass}--opening`;
+        }
+        if (isOpened) {
+            outputClass += ` ${outputClass}--opened`;
+        }
+        return outputClass;
+    };
 
-    const doorClassName = () => `Door__img ${isOpened ? 'Door__img--opened' : ''}`;
 
     return(
         <div className='Door__frame'>
-            <img className={doorClassName()} src={doorImage} alt='door' />
+            <img 
+                src={doorImage} 
+                alt='door' 
+                className={doorClassName()} 
+                onClick={() => handleOpenDoor(doorModel)}
+                onAnimationEnd={() => doorOpened(doorModel)} 
+            />
         </div>
         
     )

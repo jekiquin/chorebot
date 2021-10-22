@@ -1,26 +1,27 @@
-@use '../../styles/animations.scss' as *;
+@use '../../styles/variables' as *;
+@use '../../styles/animations' as *;
 
 .Door {
     
     &__frame {
-        height: 20rem;
-        width: 15rem;
-        // overflow: hidden;
+        height: fit-content;
+        width: min(15rem, 30%);
+        overflow: hidden;
         border: 1px solid;
+        perspective: 100rem;
     }
 
     &__img {
         width: 100%;
-        height: 100%;
         transform-origin: top left;
         
 
-        &--opened {
-            animation: door-open 1s ease 1s 1 forwards;
+        &--opening {
+            animation: door-open 1s ease 0.5s 1 forwards;
         }
 
-        // &:hover {
-        //     transform: rotateY(80deg);
-        // }
+        &--opened {
+            transform: rotateY($door-open-angle);
+        }
     }
 }
